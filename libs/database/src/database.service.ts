@@ -9,7 +9,9 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
   public readonly db: NodePgDatabase<typeof schema>;
 
   constructor() {
-    const connectionString = 'postgresql://postgres:Maharj%40n123@localhost:5432/event-flow';
+    const connectionString =
+      process.env.DATABASE_URL ||
+      'postgresql://postgres:Maharj%40n123@localhost:5432/event-flow';
 
     if (!connectionString) {
       throw new Error('DATABASE_URL is not set');
@@ -33,4 +35,3 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
     return schema;
   }
 }
-
