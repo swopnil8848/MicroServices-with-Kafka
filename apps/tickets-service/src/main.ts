@@ -16,6 +16,6 @@ async function bootstrap() {
 
   await app.listen(SERVICE_PORTS[SERVICES.TICKETS_SERVICE]);
 
-  console.log(`Tickets Service running on port : {SERVICE_PORTS[SERVICES.TICKETS_SERVICE]}`)
+  console.log(`Tickets Service running on port : ${SERVICE_PORTS[SERVICES.TICKETS_SERVICE]}`)
 }
 bootstrap();
