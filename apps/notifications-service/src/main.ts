@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { NotificationsServiceModule } from './notifications-service.module';
 import { Transport } from '@nestjs/microservices';
-import { KAFKA_BROKER, KAFKA_CLIENT_ID } from '@app/kafka';
+import { KAFKA_BROKERS, KAFKA_CLIENT_ID } from '@app/kafka';
 import { SERVICE_PORTS, SERVICES } from '@app/common';
 
 async function bootstrap() {
@@ -11,22 +11,24 @@ async function bootstrap() {
   app.connectMicroservice({
     transport: Transport.KAFKA,
     options: {
-      clinet: {
+      client: {
         clientId: `${KAFKA_CLIENT_ID}-notifications`,
-        brokers: [KAFKA_BROKER],
+        brokers: KAFKA_BROKERS,
       },
       consumer: {
-        groupId: `notifications-consumer-group`
-      }
-    }
-  })
+        groupId: `notifications-consumer-group`,
+      },
+    },
+  });
 
   // start microservices (kafka consumer)
   await app.startAllMicroservices();
 
-  await app.listen(SERVICE_PORTS[SERVICES.NOTIFICATIONS_SERVICE]);
+  console.log(
+    `Notification Service running on port ${SERVICE_PORTS[SERVICES.NOTIFICATIONS_SERVICE]}`,
+  );
 
-  console.log(`Notification Service running on port ${SERVICE_PORTS[SERVICES.NOTIFICATIONS_SERVICE]}`)
+  await app.listen(SERVICE_PORTS[SERVICES.NOTIFICATIONS_SERVICE]);
 
   console.log('Kafka Consumer Started');
 }
